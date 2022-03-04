@@ -27,6 +27,15 @@ module SpreeGlobalize
 
         super(params, options)
       end
+
+      def json_api_columns
+        d = column_names
+        if self.respond_to?(:translated_attribute_names)
+          d += self.translated_attribute_names.map(&:to_s)
+        end
+        d.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
+      end
+
       alias :search :ransack unless respond_to? :search
 
       # preload translations
